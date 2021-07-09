@@ -1,0 +1,21 @@
+<?php
+/*
+Plugin Name: WooCommerce FlatRate caché
+Plugin URI:
+Description: Plugin pour cacher le flat-rate quand la Livraison gratuite est activée
+Author: Miruna
+Version: 1.0
+Author URI:
+*/
+
+function my_hide_shipping_when_free_is_available( $rates ) {
+	$free = array();
+	foreach ( $rates as $rate_id => $rate ) {
+		if ( 'free_shipping' === $rate->method_id ) {
+			$free[ $rate_id ] = $rate;
+			break;
+		}
+	}
+	return ! empty( $free ) ? $free : $rates;
+}
+add_filter( 'woocommerce_package_rates', 'my_hide_shipping_when_free_is_available', 100 );
